@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
@@ -10,6 +12,7 @@ public class CoinFlipper : MonoBehaviour
     [SerializeField] private GameObject tura;
     [SerializeField] private GameObject cheatPanel;
     [SerializeField] private Slider cheatSlider;
+    [SerializeField] private TextMeshProUGUI infoText;
     private Random rnd;
     private int pressCount = 0;
     [SerializeField] private int yaziOrani = 50;
@@ -20,23 +23,36 @@ public class CoinFlipper : MonoBehaviour
 
     public void Flip() {
         int num  = rnd.Next(1, 101);  // creates a number between 1 and 2
-
-        if (num < yaziOrani) {
+        infoText.color = new Color(
+                UnityEngine.Random.Range(0f, 1f), 
+                UnityEngine.Random.Range(0f, 1f), 
+                UnityEngine.Random.Range(0f, 1f)
+            );
+        if (num <= yaziOrani) {
             Debug.Log("yazi");
             yazi.SetActive(true);
             tura.SetActive(false);
+            infoText.text = "Yazı";
         } else {
             Debug.Log("tura");
             tura.SetActive(true);
             yazi.SetActive(false);
+            infoText.text = "Tura";
         }
     }
 
-    public void CheatFlip() {
+    public void Reset() {
+        yazi.SetActive(false);
+        tura.SetActive(false);
+        infoText.text = "";
+    }
+
+    public void EnterCheatPanel() {
         pressCount++;
         Debug.Log("cheat button pressed");
         if (pressCount == 7) {
             pressCount = 0;
+            Reset();
             cheatPanel.SetActive(true);
         }
     }
